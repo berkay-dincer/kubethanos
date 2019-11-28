@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thanoskube
+  labels:
+    app: thanoskube
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: thanoskube
+  template:
+    metadata:
+      labels:
+        app: thanoskube
+    spec:
+      serviceAccountName: thanoskube
+      containers:
+        - name: thanoskube
+          image: <...>
+          args:
+            - --interval=10m
+            - --namespaces=!kube-system
+            - --dry-run
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65534
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: thanoskube
+  labels:
+    app: thanoskube
