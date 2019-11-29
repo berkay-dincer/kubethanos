@@ -7,7 +7,6 @@ import (
 	"kubethanos/kubethanos"
 	"kubethanos/thanos"
 	"net/http"
-	_ "net/http/pprof"
 	"os"
 	"os/signal"
 	"regexp"
@@ -155,7 +154,7 @@ func parseNamespaces(str string) labels.Selector {
 		log.WithFields(log.Fields{
 			"selector": str,
 			"err":      err,
-		}).Fatal("failed to parse selector")
+		}).Fatal("failed to parse namespaces")
 	}
 	return selector
 }
