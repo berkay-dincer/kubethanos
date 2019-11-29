@@ -23,6 +23,7 @@ See the `kubethanos.yaml` file for an example run. Here are the list of valid pa
 
 ## Other similar projects
 
+* [chaosmonkey]https://github.com/Netflix/chaosmonkey
 * [chaoskube](https://github.com/linki/chaoskube)
 * [kube-monkey](https://github.com/asobti/kube-monkey)
 * [PowerfulSeal](https://github.com/bloomberg/powerfulseal)
