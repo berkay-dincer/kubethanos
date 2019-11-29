@@ -13,6 +13,7 @@ See the `kubethanos.yaml` file for an example run. Here are the list of valid pa
 --excluded-pod-names=<regex_to_include_pod_names>
 --master // The address of the Kubernetes cluster to target, if none looks under $HOME/.kube
 --kubeconfig // Path to a kubeconfig file
+--healthcheck // Listens this endpoint for healtcheck
 --interval // Interval between killing pods
 --dry-run // If true, print out the pod names without actually killing them.
 --debug // Enable debug logging.
