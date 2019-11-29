@@ -16,6 +16,7 @@ See the `kubethanos.yaml` file for an example run. Here are the list of valid pa
 --healthcheck // Listens this endpoint for healtcheck
 --interval // Interval between killing pods
 --dry-run // If true, print out the pod names without actually killing them.
+--percentage // percentage of pods to kill. Default is 0.5 
 --debug // Enable debug logging.
 ```
 
