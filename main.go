@@ -2,10 +2,12 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"kubethanos/kubethanos"
 	"kubethanos/thanos"
 	"math/rand"
+	"net/http"
 	_ "net/http/pprof"
 	"os"
 	"os/signal"
@@ -95,6 +97,8 @@ func main() {
 		thanos.NewThanos(client, log.StandardLogger()),
 	)
 
+	go healthCheck()
+
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, syscall.SIGINT, syscall.SIGTERM)
 
@@ -156,4 +160,10 @@ func parseSelector(str string) labels.Selector {
 		}).Fatal("failed to parse selector")
 	}
 	return selector
+}
+
+func healthCheck() {
+	http.HandleFunc("/healthz", func(w http.ResponseWriter, _ *http.Request) {
+		fmt.Fprintln(w, "OK")
+	})
 }
