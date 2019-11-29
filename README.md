@@ -27,4 +27,4 @@ See the `kubethanos.yaml` file for an example run. Here are the list of valid pa
 
 ## Acknowledgements
 
-* This project is pretty much a stripped version of [@linki's](https://github.com/linki) [chaoskube](https://github.com/linki/chaoskube).
+* Thanks to [@linki](https://github.com/linki) [chaoskube](https://github.com/linki/chaoskube) for giving me the idea and having written something with a broader scope.
