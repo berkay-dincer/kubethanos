@@ -1,4 +1,4 @@
-![kubethanos](https://github.com/berkay-dincer/kubethanos/blob/master/kubethanos.png)
+![kubethanos](<img src="https://github.com/berkay-dincer/kubethanos/blob/master/kubethanos.png" height="240" width="240">)
 
 # kubethanos
 kubethanos kills half of your pods randomly to engineer chaos in your preferred environment, gives you the opportunity to see how your system behaves under failures. 
