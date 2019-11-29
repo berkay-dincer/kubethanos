@@ -4,12 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/hashicorp/go-multierror"
 	"kubethanos/thanos"
 	"math/rand"
 	"regexp"
 	"time"
-
-	"github.com/hashicorp/go-multierror"
 
 	log "github.com/sirupsen/logrus"
 
@@ -85,8 +84,10 @@ func (kubeThanos *KubeThanos) KillPods() error {
 	var result *multierror.Error
 	for _, victim := range podsToKill {
 		err = kubeThanos.DeletePod(victim)
-		result = multierror.Append(result, err)
-
+		if err != nil {
+			logger.WithFields(log.Fields{"err": err,
+				"pod": victim}).Error("Failed to delete pod...")
+		}
 	}
 
 	return result.ErrorOrNil()
@@ -104,13 +105,13 @@ func (kubeThanos *KubeThanos) SelectPodsToKill() ([]v1.Pod, error) {
 
 	logger.WithFields(log.Fields{
 		"size": len(pods),
-	}).Info("Total pods")
+	}).Info("Total pods:")
 
 	pods = RandomPodSlice(pods)
 
 	logger.WithFields(log.Fields{
 		"size": len(pods),
-	}).Info("Pods to kill")
+	}).Info("Pods to kill:")
 
 	return pods, nil
 }

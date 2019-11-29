@@ -25,7 +25,7 @@ spec:
             - --dry-run
           securityContext:
             runAsNonRoot: true
-            runAsUser: 65534
+            runAsUser: 45356
             readOnlyRootFilesystem: true
             capabilities:
               drop: ["ALL"]

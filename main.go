@@ -68,21 +68,14 @@ func main() {
 		"interval":         interval,
 		"dryRun":           dryRun,
 		"debug":            debug,
-	}).Debug("reading config")
-
-	log.WithFields(log.Fields{
-		"dryRun":   dryRun,
-		"interval": interval,
-	}).Info("starting up")
+	}).Info("started reading config")
 
 	client, err := newClient()
 	if err != nil {
-		log.WithField("err", err).Fatal("failed to connect to cluster")
+		log.WithField("err", err).Fatal("failed to connect to cluster.. exiting")
 	}
 
-	var (
-		namespaces = parseSelector(namespaces)
-	)
+	var namespaces = parseNamespaces(namespaces)
 
 	log.WithFields(log.Fields{
 		"namespaces":       namespaces,
@@ -99,7 +92,7 @@ func main() {
 		thanos.NewThanos(client, log.StandardLogger()),
 	)
 
-	go healthCheck(healthCheckAddr)
+	go startHealthCheck(healthCheckAddr)
 
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, syscall.SIGINT, syscall.SIGTERM)
@@ -119,6 +112,7 @@ func main() {
 }
 
 func newClient() (*kubernetes.Clientset, error) {
+	// look for kubeconfig in home if not set
 	if kubeconfig == "" {
 		if _, err := os.Stat(clientcmd.RecommendedHomeFile); err == nil {
 			kubeconfig = clientcmd.RecommendedHomeFile
@@ -128,7 +122,7 @@ func newClient() (*kubernetes.Clientset, error) {
 	log.WithFields(log.Fields{
 		"kubeconfig": kubeconfig,
 		"master":     master,
-	}).Debug("using cluster config")
+	}).Info("found config with parameters: ")
 
 	config, err := clientcmd.BuildConfigFromFlags(master, kubeconfig)
 	if err != nil {
@@ -153,7 +147,7 @@ func newClient() (*kubernetes.Clientset, error) {
 	return client, nil
 }
 
-func parseSelector(str string) labels.Selector {
+func parseNamespaces(str string) labels.Selector {
 	selector, err := labels.Parse(str)
 	if err != nil {
 		log.WithFields(log.Fields{
@@ -164,7 +158,7 @@ func parseSelector(str string) labels.Selector {
 	return selector
 }
 
-func healthCheck(healthCheckAddress string) {
+func startHealthCheck(healthCheckAddress string) {
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, _ *http.Request) {
 		fmt.Fprintln(w, "OK")
 	})
