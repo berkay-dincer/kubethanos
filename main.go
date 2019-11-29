@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"kubethanos/kubethanos"
 	"kubethanos/thanos"
-	"math/rand"
 	"net/http"
 	_ "net/http/pprof"
 	"os"
@@ -39,7 +38,6 @@ var (
 )
 
 func init() {
-	rand.Seed(time.Now().UTC().UnixNano())
 	klog.SetOutput(ioutil.Discard)
 
 	kingpin.Flag("namespaces", "A namespace or a set of namespaces to restrict thanoskube").StringVar(&namespaces)
