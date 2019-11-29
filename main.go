@@ -49,7 +49,7 @@ func init() {
 	kingpin.Flag("healthcheck", "Listens this endpoint for healtcheck").Default(":8080").StringVar(&healthCheckAddr)
 	kingpin.Flag("kubeconfig", "Path to a kubeconfig file").StringVar(&kubeconfig)
 	kingpin.Flag("interval", "Interval between killing pods").Default("10m").DurationVar(&interval)
-	kingpin.Flag("percentage", "Percentage of pods to kill").Default("50").FloatVar(&percentageToKill)
+	kingpin.Flag("percentage", "Percentage of pods to kill").Default("0.5").FloatVar(&percentageToKill)
 	kingpin.Flag("dry-run", "If true, print out the pod names without actually killing them.").Default("true").BoolVar(&dryRun)
 	kingpin.Flag("debug", "Enable debug logging.").BoolVar(&debug)
 }
