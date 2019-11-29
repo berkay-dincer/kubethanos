@@ -36,6 +36,10 @@ See the `kubethanos.yaml` file for an example run. Here are the list of valid pa
 
 * Thanks to [@linki](https://github.com/linki) [chaoskube](https://github.com/linki/chaoskube) for giving me the idea and having written something with a broader scope.
 
+## Disclaimer
+
+* You are responsible for your actions. If you break things in production while using this software I cannot help you to restore the damage caused.  
+
 ## Contribute
 
 Any contributions are welcome!
