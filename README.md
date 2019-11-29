@@ -19,6 +19,8 @@ See the `kubethanos.yaml` file for an example run. Here are the list of valid pa
 --debug // Enable debug logging.
 ```
 
+* Configure kubernetes readiness & liveliness probes to `/healthz` endpoint.
+
 ## Other similar projects
 
 * [chaoskube](https://github.com/linki/chaoskube)
