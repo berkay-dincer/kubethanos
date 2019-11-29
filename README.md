@@ -29,3 +29,11 @@ See the `kubethanos.yaml` file for an example run. Here are the list of valid pa
 ## Acknowledgements
 
 * Thanks to [@linki](https://github.com/linki) [chaoskube](https://github.com/linki/chaoskube) for giving me the idea and having written something with a broader scope.
+
+## Contribute
+
+Any contributions are welcome!
+
+## License
+
+This project licensed under [MIT](LICENSE).
