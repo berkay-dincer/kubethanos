@@ -45,7 +45,7 @@ func init() {
 	kingpin.Flag("included-pod-names", "A regex to select which pods to kill").RegexpVar(&includedPodNames)
 	kingpin.Flag("excluded-pod-names", "A regex to exclude pods to kill").RegexpVar(&excludedPodNames)
 	kingpin.Flag("master", "The address of the Kubernetes cluster to target, if none looks under $HOME/.kube").StringVar(&master)
-	kingpin.Flag("healtcheck", "Listens this endpoint for healtcheck").Default(":8080").StringVar(&healthCheckAddr)
+	kingpin.Flag("healthcheck", "Listens this endpoint for healtcheck").Default(":8080").StringVar(&healthCheckAddr)
 	kingpin.Flag("kubeconfig", "Path to a kubeconfig file").StringVar(&kubeconfig)
 	kingpin.Flag("interval", "Interval between killing pods").Default("10m").DurationVar(&interval)
 	kingpin.Flag("dry-run", "If true, print out the pod names without actually killing them.").Default("true").BoolVar(&dryRun)
