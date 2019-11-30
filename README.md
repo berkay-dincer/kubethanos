@@ -31,6 +31,7 @@ See the `kubethanos.yaml` file for an example run. Here are the list of valid pa
 * [fabric8's chaos monkey](https://fabric8.io/guide/chaosMonkey.html)
 * [k8aos](https://github.com/AlexsJones/k8aos)
 * [Cthulhu](https://github.com/xmatters/cthulhu-chaos-testing)
+* [KubeInvaders](https://github.com/lucky-sideburn/KubeInvaders)
 
 ## Acknowledgements
 
