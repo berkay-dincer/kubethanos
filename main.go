@@ -31,7 +31,7 @@ var (
 	healthCheckAddr  string
 	kubeconfig       string
 	interval         time.Duration
-	percentageToKill float64
+	ratioToKill      float64
 	dryRun           bool
 	debug            bool
 )
@@ -46,7 +46,7 @@ func init() {
 	kingpin.Flag("healthcheck", "Listens this endpoint for healtcheck").Default(":8080").StringVar(&healthCheckAddr)
 	kingpin.Flag("kubeconfig", "Path to a kubeconfig file").StringVar(&kubeconfig)
 	kingpin.Flag("interval", "Interval between killing pods").Default("10m").DurationVar(&interval)
-	kingpin.Flag("percentage", "Percentage of pods to kill").Default("0.5").FloatVar(&percentageToKill)
+	kingpin.Flag("ratio", "Ratio of pods to kill").Default("0.5").FloatVar(&ratioToKill)
 	kingpin.Flag("dry-run", "If true, print out the pod names without actually killing them.").Default("true").BoolVar(&dryRun)
 	kingpin.Flag("debug", "Enable debug logging.").BoolVar(&debug)
 }
@@ -65,7 +65,7 @@ func main() {
 		"master":           master,
 		"kubeconfig":       kubeconfig,
 		"interval":         interval,
-		"percentageToKill": percentageToKill,
+		"ratioToKill": ratioToKill,
 		"dryRun":           dryRun,
 		"debug":            debug,
 	}).Info("started reading config")
@@ -88,7 +88,7 @@ func main() {
 		namespaces,
 		includedPodNames,
 		excludedPodNames,
-		percentageToKill,
+		ratioToKill,
 		dryRun,
 		thanos.NewThanos(client, log.StandardLogger()),
 	)

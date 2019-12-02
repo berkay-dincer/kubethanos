@@ -29,7 +29,7 @@ type KubeThanos struct {
 	IncludedPodNames *regexp.Regexp
 	ExcludedPodNames *regexp.Regexp
 	Thanos           *thanos.Thanos
-	PercentageToKill float64
+	RatioToKill      float64
 	DryRun           bool
 	EventRecorder    record.EventRecorder
 }
@@ -39,7 +39,7 @@ var logger = log.StandardLogger()
 var podNotFound = "pod not found"
 var errPodNotFound = errors.New(podNotFound)
 
-func New(client kubernetes.Interface, namespaces labels.Selector, includedPodNames, excludedPodNames *regexp.Regexp, percentageToKill float64, dryRun bool, thanos *thanos.Thanos) *KubeThanos {
+func New(client kubernetes.Interface, namespaces labels.Selector, includedPodNames, excludedPodNames *regexp.Regexp, ratioToKill float64, dryRun bool, thanos *thanos.Thanos) *KubeThanos {
 	broadcaster := record.NewBroadcaster()
 	broadcaster.StartRecordingToSink(&typedcorev1.EventSinkImpl{Interface: client.CoreV1().Events(v1.NamespaceAll)})
 	recorder := broadcaster.NewRecorder(scheme.Scheme, v1.EventSource{Component: "thanos"})
@@ -50,7 +50,7 @@ func New(client kubernetes.Interface, namespaces labels.Selector, includedPodNam
 		IncludedPodNames: includedPodNames,
 		ExcludedPodNames: excludedPodNames,
 		DryRun:           dryRun,
-		PercentageToKill: percentageToKill,
+		RatioToKill:      ratioToKill,
 		Thanos:           thanos,
 		EventRecorder:    recorder,
 	}
@@ -109,7 +109,7 @@ func (kubeThanos *KubeThanos) SelectPodsToKill() ([]v1.Pod, error) {
 		"size": len(pods),
 	}).Info("Total pods:")
 
-	pods = RandomPodSlice(pods, kubeThanos.PercentageToKill)
+	pods = RandomPodSlice(pods, kubeThanos.RatioToKill)
 
 	logger.WithFields(log.Fields{
 		"size": len(pods),
