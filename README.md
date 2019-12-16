@@ -3,6 +3,16 @@
 # kubethanos
 kubethanos kills half of your pods randomly to engineer chaos in your preferred environment, gives you the opportunity to see how your system behaves under failures. 
 
+## Table of Contents
+- [Usage](#usage)
+  * [Valid Parameters](#applying)
+- [Other Similar Projects](#other-similar-projects)  
+- [Acknowledgements](#acknowledgements)  
+- [Disclaimer](#disclaimer)  
+- [Contribute](#contribute)  
+- [Code of Conduct](#code-of-conduct)  
+- [License](#license)  
+
 ## Usage
 
 See the `kubethanos.yaml` file for an example run. Here are the list of valid parameters:
@@ -43,7 +53,11 @@ See the `kubethanos.yaml` file for an example run. Here are the list of valid pa
 
 ## Contribute
 
-Any contributions are welcome!
+Any contributions are welcome! Please see the [contributing](CONTRIBUTING.md) file for details.
+
+## Code of Conduct
+
+Please check the [code of conduct](CODE_OF_CONDUCT.md) page for efficient collaboration and communication.
 
 ## License
 
