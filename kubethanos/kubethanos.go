@@ -88,7 +88,7 @@ func (kubeThanos *KubeThanos) KillPods() error {
 		err = kubeThanos.DeletePod(victim)
 		if err != nil {
 			logger.WithFields(log.Fields{"err": err,
-				"pod": victim}).Error("Failed to delete pod...")
+				"pod": victim}).Error("failed to delete pod...")
 		}
 	}
 
@@ -107,13 +107,13 @@ func (kubeThanos *KubeThanos) SelectPodsToKill() ([]v1.Pod, error) {
 
 	logger.WithFields(log.Fields{
 		"size": len(pods),
-	}).Info("Total pods:")
+	}).Info("total pods:")
 
 	pods = RandomPodSlice(pods, kubeThanos.RatioToKill)
 
 	logger.WithFields(log.Fields{
 		"size": len(pods),
-	}).Info("Pods to kill:")
+	}).Info("pods to kill:")
 
 	return pods, nil
 }
@@ -156,7 +156,7 @@ func (kubeThanos *KubeThanos) DeletePod(pod v1.Pod) error {
 		return err
 	}
 
-	kubeThanos.EventRecorder.Event(ref, v1.EventTypeNormal, "Killing", "Pod was killed by kubethanos to restore balance.")
+	kubeThanos.EventRecorder.Event(ref, v1.EventTypeNormal, "killing", "pod was killed by kubethanos to restore balance.")
 
 	return nil
 }

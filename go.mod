@@ -9,7 +9,7 @@ require (
 	github.com/hashicorp/go-multierror v1.0.0
 	github.com/imdario/mergo v0.3.7 // indirect
 	github.com/sirupsen/logrus v1.4.2
-	github.com/stretchr/testify v1.4.0
+	github.com/stretchr/testify v1.4.0 // indirect
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45 // indirect
 	golang.org/x/time v0.0.0-20190308202827-9d24e82272b4 // indirect
 	k8s.io/api v0.0.0-20190620084959-7cf5895f2711
