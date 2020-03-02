@@ -145,7 +145,7 @@ func filterByPodName(pods []v1.Pod, includedPodNames string) (filteredPods []v1.
 	for _, pod := range pods {
 		for _, includedPodName := range includedPodNamesList {
 			if strings.Contains(pod.ObjectMeta.Name, includedPodName) {
-				resultingPods = append(filteredPods, pod)
+				resultingPods = append(resultingPods, pod)
 			}
 		}
 	}
