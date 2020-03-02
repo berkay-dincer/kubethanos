@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"kubethanos/thanos"
 	"math/rand"
-	"regexp"
+	"strings"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -26,8 +26,8 @@ import (
 type KubeThanos struct {
 	Client           kubernetes.Interface
 	Namespaces       labels.Selector
-	IncludedPodNames *regexp.Regexp
-	ExcludedPodNames *regexp.Regexp
+	IncludedPodNames string
+	ExcludedPodNames string
 	Thanos           *thanos.Thanos
 	RatioToKill      float64
 	DryRun           bool
@@ -39,7 +39,7 @@ var logger = log.StandardLogger()
 var podNotFound = "pod not found"
 var errPodNotFound = errors.New(podNotFound)
 
-func New(client kubernetes.Interface, namespaces labels.Selector, includedPodNames, excludedPodNames *regexp.Regexp, ratioToKill float64, dryRun bool, thanos *thanos.Thanos) *KubeThanos {
+func New(client kubernetes.Interface, namespaces labels.Selector, includedPodNames string, excludedPodNames string, ratioToKill float64, dryRun bool, thanos *thanos.Thanos) *KubeThanos {
 	broadcaster := record.NewBroadcaster()
 	broadcaster.StartRecordingToSink(&typedcorev1.EventSinkImpl{Interface: client.CoreV1().Events(v1.NamespaceAll)})
 	recorder := broadcaster.NewRecorder(scheme.Scheme, v1.EventSource{Component: "thanos"})
@@ -125,15 +125,32 @@ func (kubeThanos *KubeThanos) SelectCandidatePods() ([]v1.Pod, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	filteredPods, err := filterByNamespaces(allPods.Items, kubeThanos.Namespaces)
 	if err != nil {
 		return nil, err
 	}
 
+
+	filteredPods = filterByPodName(filteredPods, kubeThanos.IncludedPodNames)
+
 	filteredPods = filterTerminatingPods(filteredPods)
 
 	return filteredPods, nil
+}
+
+func filterByPodName(pods []v1.Pod, includedPodNames string) (filteredPods []v1.Pod) {
+	includedPodNamesList := strings.Split(includedPodNames, ",")
+
+	var resultingPods []v1.Pod
+	for _, pod := range pods {
+		for _, includedPodName := range includedPodNamesList {
+			if strings.Contains(pod.ObjectMeta.Name, includedPodName) {
+				resultingPods = append(filteredPods, pod)
+			}
+		}
+	}
+
+	return resultingPods
 }
 
 func (kubeThanos *KubeThanos) DeletePod(pod v1.Pod) error {
