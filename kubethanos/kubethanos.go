@@ -130,9 +130,7 @@ func (kubeThanos *KubeThanos) SelectCandidatePods() ([]v1.Pod, error) {
 		return nil, err
 	}
 
-
 	filteredPods = filterByPodName(filteredPods, kubeThanos.IncludedPodNames)
-
 	filteredPods = filterTerminatingPods(filteredPods)
 
 	return filteredPods, nil
