@@ -25,7 +25,7 @@ See the `kubethanos.yaml` file for an example run. Here are the list of valid pa
 --kubeconfig // Path to a kubeconfig file
 --healthcheck // Listens this endpoint for healtcheck
 --interval // Interval between killing pods
---dry-run // If true, print out the pod names without actually killing them.
+--dry-run // If true, print out the pod names without actually killing them. Defaults *FALSE*
 --ratio // ratio of pods to kill. Default is 0.5 
 --debug // Enable debug logging.
 ```
