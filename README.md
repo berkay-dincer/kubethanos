@@ -19,8 +19,8 @@ See the `kubethanos.yaml` file for an example run. Here are the list of valid pa
 
 ```
 --namespaces=!kubesystem,foo-bar // A namespace or a set of namespaces to restrict thanoskube
---included-pod-names=<regex_to_include_pod_names>
---excluded-pod-names=<regex_to_include_pod_names>
+--included-pod-names=<pod_will_be_selected_if_pod_name_contains_this_string>
+--excluded-pod-names=<pod_will_be_excluded_if_pod_name_contains_this_string>
 --master // The address of the Kubernetes cluster to target, if none looks under $HOME/.kube
 --kubeconfig // Path to a kubeconfig file
 --healthcheck // Listens this endpoint for healtcheck
