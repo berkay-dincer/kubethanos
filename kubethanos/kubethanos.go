@@ -130,19 +130,40 @@ func (kubeThanos *KubeThanos) SelectCandidatePods() ([]v1.Pod, error) {
 		return nil, err
 	}
 
-	filteredPods = filterByPodName(filteredPods, kubeThanos.IncludedPodNames)
+	filteredPods = includePodsByPodName(filteredPods, kubeThanos.IncludedPodNames)
+	filteredPods = excludePodsByPodName(filteredPods, kubeThanos.ExcludedPodNames)
+
 	filteredPods = filterTerminatingPods(filteredPods)
 
 	return filteredPods, nil
 }
 
-func filterByPodName(pods []v1.Pod, includedPodNames string) (filteredPods []v1.Pod) {
+func includePodsByPodName(pods []v1.Pod, includedPodNames string) (filteredPods []v1.Pod) {
 	includedPodNamesList := strings.Split(includedPodNames, ",")
 
 	var resultingPods []v1.Pod
 	for _, pod := range pods {
-		for _, includedPodName := range includedPodNamesList {
-			if strings.Contains(pod.ObjectMeta.Name, includedPodName) {
+		for _, podNameToInclude := range includedPodNamesList {
+			if strings.Contains(pod.ObjectMeta.Name, podNameToInclude) {
+				resultingPods = append(resultingPods, pod)
+			}
+		}
+	}
+
+	return resultingPods
+}
+
+func excludePodsByPodName(pods []v1.Pod, excludedPodNames string) (filteredPods []v1.Pod) {
+	excludedPodNamesList := strings.Split(excludedPodNames, ",")
+
+	if len(excludedPodNamesList) == 1 && excludedPodNamesList[0] == "" {
+		return pods
+	}
+
+	var resultingPods []v1.Pod
+	for _, pod := range pods {
+		for _, podNameToExclude := range excludedPodNamesList {
+			if !strings.Contains(pod.ObjectMeta.Name, podNameToExclude) {
 				resultingPods = append(resultingPods, pod)
 			}
 		}
