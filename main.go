@@ -25,6 +25,7 @@ import (
 var (
 	namespaces       string
 	includedPodNames string
+	includedNodeNames string
 	excludedPodNames string
 	master           string
 	healthCheckAddr  string
@@ -39,8 +40,9 @@ func init() {
 	klog.SetOutput(ioutil.Discard)
 
 	kingpin.Flag("namespaces", "A namespace or a set of namespaces to restrict thanoskube").StringVar(&namespaces)
-	kingpin.Flag("included-pod-names", "A regex to select which pods to kill").StringVar(&includedPodNames)
-	kingpin.Flag("excluded-pod-names", "A regex to exclude pods to kill").StringVar(&excludedPodNames)
+	kingpin.Flag("included-pod-names", "A string to select which pods to kill").StringVar(&includedPodNames)
+	kingpin.Flag("node-names", "A string to select nodes, pods within the selected nodes will be killed").StringVar(&includedNodeNames)
+	kingpin.Flag("excluded-pod-names", "A string to exclude pods to kill").StringVar(&excludedPodNames)
 	kingpin.Flag("master", "The address of the Kubernetes cluster to target, if none looks under $HOME/.kube").StringVar(&master)
 	kingpin.Flag("healthcheck", "Listens this endpoint for healtcheck").Default(":8080").StringVar(&healthCheckAddr)
 	kingpin.Flag("kubeconfig", "Path to a kubeconfig file").StringVar(&kubeconfig)
@@ -60,6 +62,7 @@ func main() {
 	log.WithFields(log.Fields{
 		"namespaces":       namespaces,
 		"includedPodNames": includedPodNames,
+		"nodeNames": includedNodeNames,
 		"excludedPodNames": excludedPodNames,
 		"master":           master,
 		"kubeconfig":       kubeconfig,
@@ -79,6 +82,7 @@ func main() {
 	log.WithFields(log.Fields{
 		"namespaces":       namespaces,
 		"includedPodNames": includedPodNames,
+		"nodeNames": includedNodeNames,
 		"excludedPodNames": excludedPodNames,
 	}).Info("setting pod filter")
 
@@ -86,6 +90,7 @@ func main() {
 		client,
 		namespaces,
 		includedPodNames,
+		includedNodeNames,
 		excludedPodNames,
 		ratioToKill,
 		dryRun,

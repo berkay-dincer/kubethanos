@@ -27,6 +27,7 @@ type KubeThanos struct {
 	Client           kubernetes.Interface
 	Namespaces       labels.Selector
 	IncludedPodNames string
+	IncludedNodeNames string
 	ExcludedPodNames string
 	Thanos           *thanos.Thanos
 	RatioToKill      float64
@@ -39,7 +40,7 @@ var logger = log.StandardLogger()
 var podNotFound = "pod not found"
 var errPodNotFound = errors.New(podNotFound)
 
-func New(client kubernetes.Interface, namespaces labels.Selector, includedPodNames string, excludedPodNames string, ratioToKill float64, dryRun bool, thanos *thanos.Thanos) *KubeThanos {
+func New(client kubernetes.Interface, namespaces labels.Selector, includedPodNames string, includedNodeNames string, excludedPodNames string, ratioToKill float64, dryRun bool, thanos *thanos.Thanos) *KubeThanos {
 	broadcaster := record.NewBroadcaster()
 	broadcaster.StartRecordingToSink(&typedcorev1.EventSinkImpl{Interface: client.CoreV1().Events(v1.NamespaceAll)})
 	recorder := broadcaster.NewRecorder(scheme.Scheme, v1.EventSource{Component: "thanos"})
@@ -48,6 +49,7 @@ func New(client kubernetes.Interface, namespaces labels.Selector, includedPodNam
 		Client:           client,
 		Namespaces:       namespaces,
 		IncludedPodNames: includedPodNames,
+		IncludedNodeNames: includedNodeNames,
 		ExcludedPodNames: excludedPodNames,
 		DryRun:           dryRun,
 		RatioToKill:      ratioToKill,
@@ -130,12 +132,28 @@ func (kubeThanos *KubeThanos) SelectCandidatePods() ([]v1.Pod, error) {
 		return nil, err
 	}
 
+	filteredPods = includePodsByNodeName(filteredPods, kubeThanos.IncludedNodeNames)
 	filteredPods = includePodsByPodName(filteredPods, kubeThanos.IncludedPodNames)
 	filteredPods = excludePodsByPodName(filteredPods, kubeThanos.ExcludedPodNames)
 
 	filteredPods = filterTerminatingPods(filteredPods)
 
 	return filteredPods, nil
+}
+
+func includePodsByNodeName(pods []v1.Pod, includedNodeNames string) (filteredPods []v1.Pod) {
+	includedPodNamesList := strings.Split(includedNodeNames, ",")
+
+	var resultingPods []v1.Pod
+	for _, pod := range pods {
+		for _, podNameToInclude := range includedPodNamesList {
+			if strings.Contains(pod.Spec.NodeName, podNameToInclude) {
+				resultingPods = append(resultingPods, pod)
+			}
+		}
+	}
+
+	return resultingPods
 }
 
 func includePodsByPodName(pods []v1.Pod, includedPodNames string) (filteredPods []v1.Pod) {
