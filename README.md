@@ -24,7 +24,7 @@ See the `kubethanos.yaml` file for an example run. Here are the list of valid pa
 --excluded-pod-names=<pod(s)_will_be_excluded_if_pod_name_contains_this_string>
 --master // The address of the Kubernetes cluster to target, if none looks under $HOME/.kube
 --kubeconfig // Path to a kubeconfig file
---healthcheck // Listens this endpoint for healtcheck
+--healthcheck // Listens this endpoint for healthcheck
 --interval // Interval between killing pods
 --dry-run // If true, print out the pod names without actually killing them. Defaults *FALSE*
 --ratio // ratio of pods to kill. Default is 0.5 
