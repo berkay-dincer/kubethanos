@@ -18,7 +18,7 @@ kubethanos kills half of your pods randomly to engineer chaos in your preferred 
 See the `kubethanos.yaml` file for an example run. Here are the list of valid parameters:
 
 ```
---namespaces=!kubesystem,foo-bar // A namespace or a set of namespaces to restrict thanoskube
+--namespaces=!kubesystem,foo-bar // A namespace or a set of namespaces to restrict kubethanos
 --included-pod-names=<pod(s)_will_be_selected_if_pod_name_contains_this_string>
 --node-names=<pod(s)_will_be_selected_if_they_reside_in_given_node_names>
 --excluded-pod-names=<pod(s)_will_be_excluded_if_pod_name_contains_this_string>
